@@ -12,7 +12,7 @@ app.get('/',function(req,res) {
 
 io.sockets.on('connection', function(socket) {
               socket.on('sendMessage',function(data){
-                io.sockets.emit('newMessage',{msg:data});
+                io.sockets.emit('newMessage',{msg:data, nick: socket.nickname});
               });
   socket.on('newUser', function(data,callback){
     if(data in nicknames){
@@ -25,6 +25,17 @@ io.sockets.on('connection', function(socket) {
       updateNicknames();
     }
   });
+
+  socket.on('disconnect', function(data) {
+    if(!socket.nickname){
+      return; 
+    }
+    else {
+      delete nicknames[socket.nickname];
+      updateNicknames();
+    }
+  })
+  
   function updateNicknames(){
     io.sockets.emit('usernames',nicknames);
   }
