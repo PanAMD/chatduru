@@ -1,11 +1,11 @@
 {
   "name": "chatnodejs",
   "version": "0.1.0",
-  "description": "Chat desarrollado en node",
+  "description": "Chat desarrollado en Node.js",
   "main": "index.js",
   "author": [
-    "Kathie Malti Franco Gomez",
-    "Luis Alfredo Pére Hidalgo",
+    "Kathie Malti Franco Gómez",
+    "Luis Alfredo Pérez Hidalgo",
     "Oscar Daniel Yam Mendez",
     "Gerardo Ogazon Apolinar"
   ],
