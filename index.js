@@ -12,8 +12,8 @@ app.get('/',function(req,res) {
 
 io.sockets.on('connection', function(socket) {
               socket.on('sendMessage',function(data){
-                io.sockets.emit('newMessage',{msg:data, nick: socket.nickname});
-              });
+              io.sockets.emit('newMessage',{msg:data, nick: socket.nickname});
+});
   socket.on('newUser', function(data,callback){
     if(data in nicknames){
       callback(false);
@@ -21,24 +21,25 @@ io.sockets.on('connection', function(socket) {
     else{
       callback(true);
       socket.nickname = data;
-      nicknames[socket.nickname] =1;
+      nicknames[socket.nickname] = 1;
       updateNicknames();
     }
   });
 
   socket.on('disconnect', function(data) {
-    if(!socket.nickname){
+    if(!socket.nickname) //}
       return; 
-    }
-    else {
+    //}
+    //else {
       delete nicknames[socket.nickname];
       updateNicknames();
-    }
-  })
+    //}
+  });
   
   function updateNicknames(){
     io.sockets.emit('usernames',nicknames);
   }
 });
+ 
  
 
