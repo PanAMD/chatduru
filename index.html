@@ -4,16 +4,24 @@
       Node.js Chatduru
     </title>
     <!-- Latest compiled and minified CSS -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     
     <!-- Latest compiled and minified JavaScript -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>    
+ 
 
   <style>
+    #content{
+      display: none;
+    }
+    #chatContent{
+      float: left;
+    }
     #chat{
       position:relative;
       width:100%;
@@ -29,9 +37,21 @@
     <div class="container">
       <div class="page-header">
         <h1>Node.js Chat <small>developed by <a href="https://geekytheory.com">Geeky Theory</a></small></h1>
-        
       </div>
-      <div id='content' class='row' style='height: 70%;'>
+
+      <div class="input-group" style="width::300px;text-align:center;margin:0 auto;" id="nickContainer">
+        <input type="text" id="nickname" class="form-control input-lg" placeholder="Enter your username"/>
+        <span class="input-group-btn">
+          <button class="btn btn-lg btn-primary" type="submit" id="setNick">OK</button>
+        </span>
+      </div>
+
+      <div class="alert fade in alert-danger alert-dismissable" data-dismiss="alert" id="login-error" style="display:none">
+        <button type="button" class="close" id="closeAlert" data-dismiss="alert">x</button>
+        That username is already taken. Try again.
+      </div> 
+      
+      <div class='row' id='content' style='height: 70%;'>
         <div class='col-md-2'></div>
         <div id='chatContent' class='col-md-6'>
           <div class='panel panel-success'>
@@ -49,7 +69,14 @@
               </form>
         </div>
         </div>
-     
+      <div class="col-md-2">
+        <div class="panel panel-info">
+          <div class="panel-heading">
+            USERS
+          </div>
+          <div class="panel-body" id="users"></div>
+        </div>
+      </div>
     </div>
    <script src = "/socket.io/socket.io.js"></script>
    <script type= "text/javascript">
@@ -64,9 +91,10 @@
 
        var users = $("#users");
 
-       setNick.click(function(e){
+      setNick.click(function(e){
          e.preventDefault();
-         socket.emit('newUser',nickname.val(),function(data) {
+      socket.emit('newUser',nickname.val(),function(data)
+        {
            if(data){
              $("#nickContaniner").hide();
              $("#content").show();
@@ -88,7 +116,7 @@
        socket.on('usernames', function(data){
          var usernamesString = "";
          for(var username in data){
-           usernameString+=username + "<br/>";
+           usernamesString += username + "<br/>";
          }
          users.html(usernamesString);
        });
